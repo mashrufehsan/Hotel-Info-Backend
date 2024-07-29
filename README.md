@@ -22,7 +22,7 @@ This repository contains the backend of the Hotel Details application. The backe
     ```
 2. Navigate to the project directory:
     ```bash
-    cd server
+    cd Hotel-Info-Backend
     ```
 3. Install the dependencies:
     ```bash
