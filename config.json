@@ -3,7 +3,7 @@
         "user": "postgres",
         "host": "localhost",
         "database": "hotels",
-        "password": "p@stgress",
-        "port": 5433
+        "password": "admin",
+        "port": 5432
     }
 }

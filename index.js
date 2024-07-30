@@ -85,6 +85,39 @@ app.post('/add-hotel', upload.fields([{ name: 'images' }, { name: 'host_image' }
     }
 });
 
+app.post('/add-room', upload.single('room_image'), async (req, res) => {
+    const {
+        room_slug,
+        hotel_slug,
+        room_title,
+        bedroom_count
+    } = req.body;
+
+    const room_image = req.file ? '/uploads/' + req.file.filename : null;
+
+    try {
+        const client = await pool.connect();
+        await client.query(
+            `INSERT INTO rooms (
+                room_slug, hotel_slug, room_image, room_title, bedroom_count
+            ) VALUES ($1, $2, $3, $4, $5)`,
+            [
+                room_slug,
+                hotel_slug,
+                room_image,
+                room_title,
+                bedroom_count === '' ? null : parseInt(bedroom_count, 10)
+            ]
+        );
+        client.release();
+        res.status(201).json({ message: 'Room added successfully' });
+    } catch (err) {
+        console.error('Error inserting data', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
 app.get('/get-hotel/:slug', async (req, res) => {
     const { slug } = req.params;
 
@@ -106,6 +139,30 @@ app.get('/get-hotel/:slug', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+app.get('/get-room', async (req, res) => {
+    const { hotel_slug, room_slug } = req.query;
+
+    try {
+        const client = await pool.connect();
+        const result = await client.query(
+            `SELECT * FROM rooms WHERE hotel_slug = $1 AND room_slug = $2`,
+            [hotel_slug, room_slug]
+        );
+        client.release();
+
+        if (result.rows.length === 0) {
+            res.status(404).json({ error: 'No rooms found' });
+        } else {
+            res.status(200).json(result.rows);
+        }
+    } catch (err) {
+        console.error('Error retrieving data', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
 
 // Start the server
 const PORT = process.env.PORT || 4000;

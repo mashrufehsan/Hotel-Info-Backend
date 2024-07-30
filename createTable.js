@@ -26,7 +26,7 @@ const createTables = async () => {
         );
 
         CREATE TABLE IF NOT EXISTS rooms (
-            room_slug VARCHAR(255) PRIMARY KEY,
+            room_slug VARCHAR(255),
             hotel_slug VARCHAR(255) REFERENCES hotels(slug) ON DELETE CASCADE,
             room_image TEXT,
             room_title VARCHAR(255) NOT NULL,
