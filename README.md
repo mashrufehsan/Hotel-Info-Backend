@@ -46,7 +46,9 @@ This repository contains the backend of the Hotel Details application. The backe
 
 ## API Endpoints
 - `GET /get-hotel/:slug` - Get details of a hotel by slug.
-- `POST /add-hotel` - Insert a Hotel details into the database.
+- `POST /add-hotel` - Insert Hotel details into the database.
+- `GET /get-room` - Get the hotel room details by slug.
+- `POST /add-room` - Insert room details into the database.
 - More endpoints can be added as needed.
 
 ## Database Schema
